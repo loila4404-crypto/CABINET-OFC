@@ -1,0 +1,419 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 228, 228, 231;
+  --background-start-rgb: 10, 10, 11;
+  --background-end-rgb: 26, 26, 28;
+}
+
+/* Темная тема (по умолчанию) */
+[data-theme="dark"] {
+  --foreground-rgb: 228, 228, 231;
+  --background-start-rgb: 10, 10, 11;
+  --background-end-rgb: 26, 26, 28;
+}
+
+/* Светлая тема */
+[data-theme="light"] {
+  --foreground-rgb: 39, 39, 42;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 249, 250, 251;
+}
+
+* {
+  @apply transition-colors duration-200;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: transparent;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Стили для скролла вкладок (как в Telegram) */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Кастомный скроллбар в стиле Cursor */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A0A0B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2A2A2D;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3A3A3D;
+}
+
+/* Анимации в стиле Cursor */
+@keyframes cursor-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.cursor-glow-animation {
+  animation: cursor-glow 3s ease-in-out infinite;
+}
+
+.gradient-animation {
+  background-size: 200% 200%;
+  animation: gradient-shift 5s ease infinite;
+}
+
+/* Эффект свечения для кнопок */
+.btn-cursor {
+  @apply relative overflow-hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-cursor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.btn-cursor:hover::before {
+  left: 100%;
+}
+
+/* Эффект стекла (glassmorphism) */
+.glass {
+  background: rgba(26, 26, 28, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(42, 42, 45, 0.4);
+}
+
+/* Градиентный текст */
+.gradient-text {
+  background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 50%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== 3D ЭФФЕКТЫ ========== */
+
+/* 3D Кнопка с глубиной */
+.btn-3d {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  perspective: 1000px;
+}
+
+.btn-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.btn-3d:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 10px 25px rgba(139, 92, 246, 0.4),
+    0 0 40px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.btn-3d:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 
+    0 2px 10px rgba(139, 92, 246, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-3d:hover::before {
+  opacity: 1;
+}
+
+/* 3D Карточка */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  perspective: 1000px;
+}
+
+.card-3d:hover {
+  transform: translateY(-8px) rotateX(2deg);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* 3D Модальное окно */
+.modal-3d {
+  transform-style: preserve-3d;
+  animation: modalAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  perspective: 1000px;
+}
+
+@keyframes modalAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) rotateX(-10deg) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateX(0) translateY(0);
+  }
+}
+
+/* 3D Переключатель кнопок */
+.tab-switch {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-switch.active {
+  transform: translateY(-2px);
+  z-index: 1;
+}
+
+.tab-switch.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #8B5CF6 0%, #6366F1 50%, #3B82F6 100%);
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 -2px 10px rgba(139, 92, 246, 0.5);
+  animation: tabGlow 2s ease-in-out infinite;
+}
+
+@keyframes tabGlow {
+  0%, 100% {
+    box-shadow: 0 -2px 10px rgba(139, 92, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 -2px 20px rgba(139, 92, 246, 0.8);
+  }
+}
+
+/* 3D Декоративные элементы */
+.decorative-3d {
+  transform-style: preserve-3d;
+  animation: float3d 6s ease-in-out infinite;
+}
+
+@keyframes float3d {
+  0%, 100% {
+    transform: translateY(0) rotateX(0deg) rotateY(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotateX(5deg) rotateY(5deg);
+  }
+  66% {
+    transform: translateY(-10px) rotateX(-5deg) rotateY(-5deg);
+  }
+}
+
+/* Геометрические 3D формы */
+.geometric-3d {
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotate3d 20s linear infinite;
+}
+
+@keyframes rotate3d {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+  }
+}
+
+/* Профессиональные иконки */
+.icon-3d {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3));
+}
+
+.icon-3d:hover {
+  transform: translateY(-2px) scale(1.1) rotateY(10deg);
+  filter: drop-shadow(0 4px 8px rgba(139, 92, 246, 0.5));
+}
+
+/* 3D Боковая панель */
+.sidebar-3d {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.sidebar-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.3) 50%,
+    transparent 100%
+  );
+  box-shadow: 2px 0 10px rgba(139, 92, 246, 0.2);
+}
+
+/* Плавное переключение между элементами */
+.smooth-transition {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 3D Эффект для input */
+.input-3d {
+  transform-style: preserve-3d;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-3d:focus {
+  transform: translateZ(10px);
+  box-shadow: 
+    0 0 0 2px rgba(139, 92, 246, 0.2),
+    0 8px 16px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Глубина для статистических карточек */
+.stat-card-3d {
+  transform-style: preserve-3d;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.stat-card-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.stat-card-3d:hover {
+  transform: translateY(-4px) translateZ(20px);
+  box-shadow: 
+    0 12px 24px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(139, 92, 246, 0.2);
+}
+
+.stat-card-3d:hover::before {
+  opacity: 1;
+}
+
+/* Профессиональная кнопка закрытия */
+.close-btn-3d {
+  transform-style: preserve-3d;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.close-btn-3d::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(99, 102, 241, 0.2));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.close-btn-3d:hover {
+  transform: rotate(90deg) scale(1.1);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.close-btn-3d:hover::before {
+  opacity: 1;
+}
+
+/* 3D Эффект для меню */
+.menu-3d {
+  transform-style: preserve-3d;
+  animation: menuSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes menuSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) rotateX(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+
+
+
+
