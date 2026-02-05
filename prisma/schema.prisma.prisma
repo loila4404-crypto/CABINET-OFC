@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String          @id @default(cuid())
+  email             String          @unique
+  password          String
+  twoFactorEnabled  Boolean         @default(false)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  accounts          RedditAccount[]
+  subreddits        Subreddit[]
+  subredditTabs     SubredditTab[]
+  ownedCabinets     CabinetMember[] @relation("CabinetOwner")
+  memberCabinets    CabinetMember[] @relation("CabinetMember")
+  sentInvitations   CabinetInvitation[] @relation("InvitationSender")
+  receivedInvitations CabinetInvitation[] @relation("InvitationReceiver")
+}
+
+model RedditAccount {
+  id            String   @id @default(cuid())
+  userId        String
+  redditUrl     String
+  username      String?
+  email         String
+  password      String
+  redditToken   String?  // Токен для live обновления
+  avatarUrl     String?  // URL аватара Reddit
+  comments      Int?
+  karma         Int?
+  accountAge    Int?
+  posts         Int?
+  subscribers   Int?
+  contributions Int?
+  goldEarned    Int?
+  activeIn      Int?  // Количество активных сообществ
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@unique([userId, redditUrl]) // Уникальная комбинация userId и redditUrl
+}
+
+model SubredditTab {
+  id          String      @id @default(cuid())
+  userId      String
+  name        String      // Название вкладки (например, "Программирование", "Дизайн")
+  order       Int         @default(0) // Порядок отображения вкладок
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subreddits  Subreddit[]
+
+  @@index([userId])
+  @@unique([userId, name]) // Уникальная комбинация userId и name
+}
+
+model Subreddit {
+  id           String        @id @default(cuid())
+  userId       String
+  tabId        String?       // ID вкладки, к которой принадлежит сабреддит (null = без вкладки)
+  name         String        // Название сабреддита (например, "r/programming")
+  url          String        // Полная ссылка на сабреддит
+  postingRules String?       // Описание правил как выставлять посты (обучающая информация)
+  order        Int           @default(0) // Порядок отображения внутри вкладки
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tab          SubredditTab? @relation(fields: [tabId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([tabId])
+  @@unique([userId, url]) // Уникальная комбинация userId и url
+}
+
+model CabinetMember {
+  id            String   @id @default(cuid())
+  cabinetOwnerId String  // ID владельца кабинета
+  memberId      String   // ID участника
+  canView       Boolean  @default(true)  // Право на просмотр
+  canEdit       Boolean  @default(false) // Право на редактирование
+  canDelete     Boolean  @default(false) // Право на удаление
+  canManageMembers Boolean @default(false) // Право на управление участниками
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  cabinetOwner  User     @relation("CabinetOwner", fields: [cabinetOwnerId], references: [id], onDelete: Cascade)
+  member        User     @relation("CabinetMember", fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([cabinetOwnerId])
+  @@index([memberId])
+  @@unique([cabinetOwnerId, memberId]) // Один пользователь может быть участником кабинета только один раз
+}
+
+model CabinetInvitation {
+  id            String   @id @default(cuid())
+  senderId      String   // ID владельца кабинета, который отправляет приглашение
+  receiverId    String   // ID пользователя, которому отправлено приглашение
+  token         String   @unique // Уникальный токен для ссылки приглашения
+  canView       Boolean  @default(true)
+  canEdit       Boolean  @default(false)
+  canDelete     Boolean  @default(false)
+  canManageMembers Boolean @default(false)
+  status        String   @default("pending") // pending, accepted, declined
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  sender        User     @relation("InvitationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver      User     @relation("InvitationReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([token])
+  @@index([status])
+}
+

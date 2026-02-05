@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reddit Cabinet - Превью</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(to bottom, #1a1a1b, #272729);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .home-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .home-page h1 {
+            font-size: 3rem;
+            color: #FF4500;
+            margin-bottom: 1rem;
+        }
+
+        .home-page p {
+            font-size: 1.25rem;
+            color: #d7dadc;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 0 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #FF4500;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff5722;
+        }
+
+        .btn-secondary {
+            background: #343536;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #454748;
+        }
+
+        .form-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .form-box {
+            background: #272729;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-box h1 {
+            font-size: 2rem;
+            color: #FF4500;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #d7dadc;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1b;
+            border: 1px solid #343536;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #FF4500;
+        }
+
+        .form-group input::placeholder {
+            color: #818384;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #818384;
+        }
+
+        .form-footer a {
+            color: #FF4500;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 256px;
+            background: #272729;
+            border-right: 1px solid #343536;
+            min-height: 100vh;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            color: #FF4500;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sidebar-btn {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: none;
+            background: none;
+            color: #d7dadc;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar-btn:hover {
+            background: #343536;
+        }
+
+        .sidebar-btn.active {
+            background: #FF4500;
+            color: white;
+        }
+
+        .sidebar-btn.add-btn {
+            margin-top: 1rem;
+            border-top: 1px solid #343536;
+            padding-top: 1rem;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 1.5rem;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            color: #FF4500;
+        }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .account-card {
+            background: #272729;
+            border: 1px solid #343536;
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .account-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .account-card h3 {
+            font-size: 1.25rem;
+            color: #FF4500;
+            margin: 0;
+            flex: 1;
+        }
+
+        .card-menu {
+            position: relative;
+        }
+
+        .card-menu-btn {
+            background: none;
+            border: none;
+            color: #818384;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .card-menu-btn:hover {
+            background: #343536;
+            color: white;
+        }
+
+        .card-menu-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #1a1a1b;
+            border: 1px solid #343536;
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            min-width: 150px;
+            z-index: 100;
+            display: none;
+            margin-top: 4px;
+        }
+
+        .card-menu-dropdown.show {
+            display: block;
+        }
+
+        .card-menu-item {
+            padding: 0.75rem 1rem;
+            color: #d7dadc;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .card-menu-item:hover {
+            background: #343536;
+        }
+
+        .card-menu-item.delete {
+            color: #ff4444;
+        }
+
+        .card-menu-item.delete:hover {
+            background: #4a1a1a;
+        }
+
+        .copy-field {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            background: #1a1a1b;
+            border-radius: 6px;
+        }
+
+        .copy-field-label {
+            color: #818384;
+            font-size: 0.875rem;
+            min-width: 60px;
+        }
+
+        .copy-field-value {
+            color: white;
+            font-size: 0.875rem;
+            flex: 1;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: #343536;
+            border: none;
+            color: #d7dadc;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #454748;
+            color: white;
+        }
+
+        .copy-btn.copied {
+            background: #FF4500;
+            color: white;
+        }
+
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #343536;
+        }
+
+        .stats-item:last-child {
+            border-bottom: none;
+        }
+
+        .stats-label {
+            color: #818384;
+        }
+
+        .stats-value {
+            color: white;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: #1a1a1b;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .stat-label {
+            color: #818384;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            color: #FF4500;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .bg-reddit-light {
+            background: #272729;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #272729;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: #FF4500;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #818384;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #343536;
+            color: white;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Убеждаемся, что модальное окно показывается поверх всего */
+        #add-account-modal.modal-overlay {
+            position: fixed !important;
+            z-index: 10000 !important;
+        }
+
+        #add-account-modal.modal-overlay:not(.hidden) {
+            display: flex !important;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Главная страница -->
+    <div id="home-page" class="home-page">
+        <div>
+            <h1>Reddit Cabinet</h1>
+            <p>Управление и статистика ваших аккаунтов Reddit</p>
+            <div>
+                <button class="btn btn-primary" onclick="showPage('login')">Войти</button>
+                <button class="btn btn-secondary" onclick="showRegisterModal()">Регистрация</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно регистрации -->
+    <div id="register-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Регистрация</h2>
+                <button class="modal-close" onclick="hideRegisterModal()">&times;</button>
+            </div>
+            <div id="register-error" style="display: none;" class="mb-4 p-3 bg-red-900 bg-opacity-50 border border-red-700 rounded text-red-200"></div>
+            <form onsubmit="event.preventDefault(); handleRegister();">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="register-email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="register-password" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label>Подтвердите пароль</label>
+                    <input type="password" id="register-confirm-password" placeholder="••••••••" required>
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideRegisterModal()">Отмена</button>
+                </div>
+            </form>
+            <div class="form-footer">
+                Уже есть аккаунт? <a href="#" onclick="hideRegisterModal(); showPage('login'); return false;">Войти</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Страница входа -->
+    <div id="login-page" class="form-container hidden">
+        <div class="form-box">
+            <h1>Вход</h1>
+            <form onsubmit="event.preventDefault(); showPage('dashboard');">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+            </form>
+            <div class="form-footer">
+                Нет аккаунта? <a href="#" onclick="hideLogin(); showRegisterModal(); return false;">Зарегистрироваться</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кабинет -->
+    <div id="dashboard-page" class="dashboard-layout hidden">
+        <!-- Боковая панель -->
+        <aside class="sidebar">
+            <h2>Reddit Cabinet</h2>
+            <nav class="sidebar-nav">
+                <button class="sidebar-btn active" onclick="setView('accounts')" id="btn-accounts">
+                    Аккаунты
+                </button>
+                <button class="sidebar-btn" onclick="setView('stats')" id="btn-stats">
+                    Статистика
+                </button>
+                <button class="sidebar-btn add-btn" onclick="showAddForm()">
+                    + Добавить анкету
+                </button>
+                <button class="sidebar-btn" onclick="showExcelModal()">
+                    📊 Синхронизация с Excel
+                </button>
+            </nav>
+            <div style="margin-top: auto; padding-top: 2rem;">
+                <button class="btn btn-secondary" style="width: 100%;" onclick="showPage('home')">Выйти</button>
+            </div>
+        </aside>
+
+        <!-- Основной контент -->
+        <div class="main-content">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h1 id="page-title">Мои аккаунты</h1>
+                </div>
+
+                <!-- Вид аккаунтов -->
+                <div id="accounts-view">
+                    <div class="accounts-grid" id="accounts-grid">
+                        <!-- Пример карточки аккаунта -->
+                        <div class="account-card" data-account-id="demo-1">
+                            <div class="account-card-header">
+                                <h3>username123</h3>
+                                <div class="card-menu">
+                                    <button class="card-menu-btn" onclick="toggleMenu(this)">⋯</button>
+                                    <div class="card-menu-dropdown">
+                                        <button class="card-menu-item delete" onclick="deleteAccount('demo-1')">Удалить</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="copy-field">
+                                <span class="copy-field-label">Email:</span>
+                                <span class="copy-field-value" id="email-demo-1">demo1@reddit.com</span>
+                                <button class="copy-btn" onclick="copyToClipboard('demo1@reddit.com', this)">Копировать</button>
+                            </div>
+                            <div class="copy-field">
+                                <span class="copy-field-label">Пароль:</span>
+                                <span class="copy-field-value" id="password-demo-1">••••••••</span>
+                                <button class="copy-btn" onclick="copyPassword('demo-1', this)">Показать</button>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Комментарии:</span>
+                                <span class="stats-value">1,234</span>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Карма:</span>
+                                <span class="stats-value">5,678</span>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Дней:</span>
+                                <span class="stats-value">365</span>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Посты:</span>
+                                <span class="stats-value">89</span>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Подписчики:</span>
+                                <span class="stats-value">1,234</span>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Обновить статистику</button>
+                        </div>
+
+                        <div class="account-card" data-account-id="demo-2">
+                            <div class="account-card-header">
+                                <h3>another_user</h3>
+                                <div class="card-menu">
+                                    <button class="card-menu-btn" onclick="toggleMenu(this)">⋯</button>
+                                    <div class="card-menu-dropdown">
+                                        <button class="card-menu-item delete" onclick="deleteAccount('demo-2')">Удалить</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="copy-field">
+                                <span class="copy-field-label">Email:</span>
+                                <span class="copy-field-value" id="email-demo-2">demo2@reddit.com</span>
+                                <button class="copy-btn" onclick="copyToClipboard('demo2@reddit.com', this)">Копировать</button>
+                            </div>
+                            <div class="copy-field">
+                                <span class="copy-field-label">Пароль:</span>
+                                <span class="copy-field-value" id="password-demo-2">••••••••</span>
+                                <button class="copy-btn" onclick="copyPassword('demo-2', this)">Показать</button>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Комментарии:</span>
+                                <span class="stats-value">567</span>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Карма:</span>
+                                <span class="stats-value">2,345</span>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Дней:</span>
+                                <span class="stats-value">180</span>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Посты:</span>
+                                <span class="stats-value">45</span>
+                            </div>
+                            <div class="stats-item">
+                                <span class="stats-label">Подписчики:</span>
+                                <span class="stats-value">567</span>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Обновить статистику</button>
+                        </div>
+
+                        <div class="account-card" data-account-id="demo-3">
+                            <div class="account-card-header">
+                                <h3>new_user</h3>
+                                <div class="card-menu">
+                                    <button class="card-menu-btn" onclick="toggleMenu(this)">⋯</button>
+                                    <div class="card-menu-dropdown">
+                                        <button class="card-menu-item delete" onclick="deleteAccount('demo-3')">Удалить</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="copy-field">
+                                <span class="copy-field-label">Email:</span>
+                                <span class="copy-field-value" id="email-demo-3">demo3@reddit.com</span>
+                                <button class="copy-btn" onclick="copyToClipboard('demo3@reddit.com', this)">Копировать</button>
+                            </div>
+                            <div class="copy-field">
+                                <span class="copy-field-label">Пароль:</span>
+                                <span class="copy-field-value" id="password-demo-3">••••••••</span>
+                                <button class="copy-btn" onclick="copyPassword('demo-3', this)">Показать</button>
+                            </div>
+                            <p style="color: #818384; margin-bottom: 1rem;">Статистика не загружена</p>
+                            <button class="btn btn-primary" style="width: 100%;">Получить статистику</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вид статистики -->
+                <div id="stats-view" style="display: none;">
+                    <div class="bg-reddit-light rounded-lg p-6">
+                        <h2 class="text-2xl font-bold mb-6" style="color: #FF4500;">Общая статистика</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">Всего аккаунтов</div>
+                                <div class="stat-value">3</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Общая карма</div>
+                                <div class="stat-value">8,023</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Всего комментариев</div>
+                                <div class="stat-value">1,801</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Всего постов</div>
+                                <div class="stat-value">134</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно синхронизации с Excel -->
+    <div id="excel-modal" class="modal-overlay hidden" style="position: fixed; z-index: 10000;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Синхронизация с Excel</h2>
+                <button class="modal-close" onclick="hideExcelModal()">&times;</button>
+            </div>
+            <form onsubmit="event.preventDefault(); handleExcelSync();">
+                <div class="form-group">
+                    <label>Ссылка на Excel файл</label>
+                    <input type="url" id="excel-url" placeholder="https://example.com/file.xlsx" required>
+                    <p style="margin-top: 0.5rem; font-size: 0.875rem; color: #818384;">
+                        Excel файл должен содержать данные в колонках A-C (начиная со строки 2):<br/>
+                        A - Логин, B - Пароль, C - Ссылка<br/>
+                        Опционально: D - День, E - Карма, F - Посты, G - Просмотры
+                    </p>
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary" id="excel-sync-btn">Синхронизировать</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideExcelModal()">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления анкеты (вне страниц, чтобы показывалось поверх всего) -->
+    <div id="add-account-modal" class="modal-overlay hidden" style="position: fixed; z-index: 10000;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Добавить аккаунт Reddit</h2>
+                <button class="modal-close" onclick="hideAddForm()">&times;</button>
+            </div>
+            <form onsubmit="event.preventDefault(); addAccount();">
+                <div class="form-group">
+                    <label>Ссылка на профиль Reddit</label>
+                    <input type="text" id="reddit-url" placeholder="https://www.reddit.com/user/username" required>
+                </div>
+                <div class="form-group">
+                    <label>Email аккаунта Reddit</label>
+                    <input type="email" id="reddit-email" placeholder="reddit@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль аккаунта Reddit</label>
+                    <input type="password" id="reddit-password" placeholder="••••••••" required>
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideAddForm()">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showPage(page) {
+            document.querySelectorAll('[id$="-page"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+            // Скрываем только модальное окно регистрации при переключении страниц
+            const registerModal = document.getElementById('register-modal');
+            if (registerModal) {
+                registerModal.classList.add('hidden');
+            }
+            // НЕ скрываем модальное окно добавления анкеты при переключении страниц
+            // Оно должно оставаться открытым если было открыто
+            document.getElementById(page + '-page').classList.remove('hidden');
+        }
+
+        function hideLogin() {
+            document.getElementById('login-page').classList.add('hidden');
+        }
+
+        let currentView = 'accounts';
+
+        function setView(view) {
+            currentView = view;
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            if (view === 'accounts' || view === 'stats') {
+                document.getElementById('btn-' + view).classList.add('active');
+            }
+            
+            if (view === 'accounts') {
+                document.getElementById('accounts-view').style.display = 'block';
+                document.getElementById('stats-view').style.display = 'none';
+                document.getElementById('page-title').textContent = 'Мои аккаунты';
+            } else if (view === 'stats') {
+                document.getElementById('accounts-view').style.display = 'none';
+                document.getElementById('stats-view').style.display = 'block';
+                document.getElementById('page-title').textContent = 'Общая статистика';
+            }
+            // Не скрываем модальное окно добавления при переключении видов
+        }
+
+        function showAddForm() {
+            console.log('showAddForm вызвана');
+            const modal = document.getElementById('add-account-modal');
+            if (modal) {
+                console.log('Модальное окно найдено, открываем...');
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+                modal.style.zIndex = '10000';
+                setView('accounts');
+            } else {
+                console.error('Модальное окно add-account-modal не найдено!');
+            }
+        }
+
+        function hideAddForm() {
+            const modal = document.getElementById('add-account-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
+            const urlInput = document.getElementById('reddit-url');
+            const emailInput = document.getElementById('reddit-email');
+            const passwordInput = document.getElementById('reddit-password');
+            if (urlInput) urlInput.value = '';
+            if (emailInput) emailInput.value = '';
+            if (passwordInput) passwordInput.value = '';
+        }
+
+        function showRegisterModal() {
+            document.getElementById('register-modal').classList.remove('hidden');
+        }
+
+        function hideRegisterModal() {
+            document.getElementById('register-modal').classList.add('hidden');
+            document.getElementById('register-email').value = '';
+            document.getElementById('register-password').value = '';
+            document.getElementById('register-confirm-password').value = '';
+            document.getElementById('register-error').style.display = 'none';
+        }
+
+        function handleRegister() {
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const errorDiv = document.getElementById('register-error');
+
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'Пароли не совпадают';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (password.length < 6) {
+                errorDiv.textContent = 'Пароль должен быть не менее 6 символов';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            hideRegisterModal();
+            showPage('login');
+        }
+
+        function toggleMenu(btn) {
+            const dropdown = btn.nextElementSibling;
+            document.querySelectorAll('.card-menu-dropdown').forEach(menu => {
+                if (menu !== dropdown) {
+                    menu.classList.remove('show');
+                }
+            });
+            dropdown.classList.toggle('show');
+        }
+
+        function deleteAccount(accountId) {
+            if (confirm('Вы уверены, что хотите удалить этот аккаунт?')) {
+                const card = document.querySelector(`[data-account-id="${accountId}"]`);
+                if (card) {
+                    card.remove();
+                }
+            }
+            document.querySelectorAll('.card-menu-dropdown').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
+
+        function copyToClipboard(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = 'Скопировано!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Ошибка копирования:', err);
+                alert('Не удалось скопировать');
+            });
+        }
+
+        const passwordStorage = {
+            'demo-1': 'password123',
+            'demo-2': 'password456',
+            'demo-3': 'password789'
+        };
+
+        function copyPassword(accountId, btn) {
+            const passwordValue = passwordStorage[accountId] || '••••••••';
+            const passwordSpan = document.getElementById(`password-${accountId}`);
+            
+            if (passwordSpan.textContent === '••••••••') {
+                passwordSpan.textContent = passwordValue;
+                btn.textContent = 'Скрыть';
+            } else {
+                passwordSpan.textContent = '••••••••';
+                btn.textContent = 'Показать';
+            }
+        }
+
+        function addAccount() {
+            const url = document.getElementById('reddit-url').value;
+            const email = document.getElementById('reddit-email').value;
+            const password = document.getElementById('reddit-password').value;
+            const username = url.split('/').pop() || 'new_user';
+            const accountId = 'account-' + Date.now();
+            
+            passwordStorage[accountId] = password;
+            
+            const card = document.createElement('div');
+            card.className = 'account-card';
+            card.setAttribute('data-account-id', accountId);
+            card.innerHTML = `
+                <div class="account-card-header">
+                    <h3>${username}</h3>
+                    <div class="card-menu">
+                        <button class="card-menu-btn" onclick="toggleMenu(this)">⋯</button>
+                        <div class="card-menu-dropdown">
+                            <button class="card-menu-item delete" onclick="deleteAccount('${accountId}')">Удалить</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="copy-field">
+                    <span class="copy-field-label">Email:</span>
+                    <span class="copy-field-value" id="email-${accountId}">${email}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${email}', this)">Копировать</button>
+                </div>
+                <div class="copy-field">
+                    <span class="copy-field-label">Пароль:</span>
+                    <span class="copy-field-value" id="password-${accountId}">••••••••</span>
+                    <button class="copy-btn" onclick="copyPassword('${accountId}', this)">Показать</button>
+                </div>
+                <p style="color: #818384; margin-bottom: 1rem;">Статистика не загружена</p>
+                <button class="btn btn-primary" style="width: 100%;">Получить статистику</button>
+            `;
+            
+            document.getElementById('accounts-grid').appendChild(card);
+            hideAddForm();
+        }
+
+        // Закрытие меню при клике вне его
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.card-menu')) {
+                document.querySelectorAll('.card-menu-dropdown').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
+        });
+
+        function showExcelModal() {
+            const modal = document.getElementById('excel-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            }
+        }
+
+        function hideExcelModal() {
+            const modal = document.getElementById('excel-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
+            const urlInput = document.getElementById('excel-url');
+            if (urlInput) urlInput.value = '';
+        }
+
+        function handleExcelSync() {
+            const url = document.getElementById('excel-url').value;
+            const btn = document.getElementById('excel-sync-btn');
+            
+            if (!url) {
+                alert('Введите ссылку на Excel файл');
+                return;
+            }
+
+            if (btn) {
+                btn.textContent = 'Синхронизация...';
+                btn.disabled = true;
+            }
+
+            // Симуляция синхронизации (в реальном приложении здесь будет API запрос)
+            setTimeout(() => {
+                alert('Синхронизация завершена! Добавлено аккаунтов из Excel.');
+                hideExcelModal();
+                if (btn) {
+                    btn.textContent = 'Синхронизировать';
+                    btn.disabled = false;
+                }
+            }, 1500);
+        }
+
+        document.getElementById('register-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideRegisterModal();
+            }
+        });
+
+        document.getElementById('excel-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideExcelModal();
+            }
+        });
+
+        document.getElementById('add-account-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideAddForm();
+            }
+        });
+
+        showPage('home');
+    </script>
+</body>
+</html>
+

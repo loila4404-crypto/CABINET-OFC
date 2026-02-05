@@ -1,0 +1,130 @@
+// Пример схемы Prisma для PostgreSQL
+// Скопируйте содержимое в schema.prisma если используете PostgreSQL на Vercel
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"  // Измените с "sqlite" на "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Остальная часть схемы остается без изменений
+// Скопируйте модели из вашего текущего schema.prisma
+
+model User {
+  id                String          @id @default(cuid())
+  email             String          @unique
+  password          String
+  twoFactorEnabled  Boolean         @default(false)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  accounts          RedditAccount[]
+  subreddits        Subreddit[]
+  subredditTabs     SubredditTab[]
+  ownedCabinets     CabinetMember[] @relation("CabinetOwner")
+  memberCabinets    CabinetMember[] @relation("CabinetMember")
+  sentInvitations   CabinetInvitation[] @relation("InvitationSender")
+  receivedInvitations CabinetInvitation[] @relation("InvitationReceiver")
+}
+
+model RedditAccount {
+  id            String   @id @default(cuid())
+  userId        String
+  redditUrl     String
+  username      String?
+  email         String
+  password      String
+  redditToken   String?
+  avatarUrl     String?
+  comments      Int?
+  karma         Int?
+  accountAge    Int?
+  posts         Int?
+  subscribers   Int?
+  contributions Int?
+  goldEarned    Int?
+  activeIn      Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@unique([userId, redditUrl])
+}
+
+model SubredditTab {
+  id          String      @id @default(cuid())
+  userId      String
+  name        String
+  order       Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subreddits  Subreddit[]
+
+  @@index([userId])
+  @@unique([userId, name])
+}
+
+model Subreddit {
+  id           String        @id @default(cuid())
+  userId       String
+  tabId        String?
+  name         String
+  url          String
+  postingRules String?
+  order        Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tab          SubredditTab? @relation(fields: [tabId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([tabId])
+  @@unique([userId, url])
+}
+
+model CabinetMember {
+  id            String   @id @default(cuid())
+  cabinetOwnerId String
+  memberId      String
+  canView       Boolean  @default(true)
+  canEdit       Boolean  @default(false)
+  canDelete     Boolean  @default(false)
+  canManageMembers Boolean @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  cabinetOwner  User     @relation("CabinetOwner", fields: [cabinetOwnerId], references: [id], onDelete: Cascade)
+  member        User     @relation("CabinetMember", fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([cabinetOwnerId])
+  @@index([memberId])
+  @@unique([cabinetOwnerId, memberId])
+}
+
+model CabinetInvitation {
+  id            String   @id @default(cuid())
+  senderId      String
+  receiverId    String
+  token         String   @unique
+  canView       Boolean  @default(true)
+  canEdit       Boolean  @default(false)
+  canDelete     Boolean  @default(false)
+  canManageMembers Boolean @default(false)
+  status        String   @default("pending")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  sender        User     @relation("InvitationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver      User     @relation("InvitationReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([token])
+  @@index([status])
+}
+
+
+
+

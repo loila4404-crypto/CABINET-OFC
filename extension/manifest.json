@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Reddit Cabinet - Парсер данных",
+  "version": "1.0.0",
+  "description": "Извлекает данные профиля Reddit и отправляет в Reddit Cabinet",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "tabs",
+    "cookies"
+  ],
+  "host_permissions": [
+    "https://www.reddit.com/*",
+    "http://localhost:3000/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.reddit.com/user/*",
+        "https://www.reddit.com/u/*",
+        "https://old.reddit.com/user/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
+
